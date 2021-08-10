@@ -1,4 +1,4 @@
-<script src="https://unpkg.com/vue@next"></script>
+<!-- <script src="https://unpkg.com/vue@next"></script> -->
 <div id="post_header">
 <h1><input type="text" id="post_title" @blur="get_post_slug" v-model="post_title" :style="{width:get_width(post_title)}"></h1>
 <input type="text" id="post_slug" v-model="post_slug" :style="{width:get_width(post_slug)}"><br />

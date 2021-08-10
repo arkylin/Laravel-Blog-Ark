@@ -14,7 +14,7 @@
 @section('content')
 <article>
 <h2><?php echo $MD_title ?></h2>
-<div id="preview"><?php echo $post['content'] ?></div>
+<div id="preview"><?php echo GetSummary($post['content']); ?></div>
 </article>
 @stop
 
@@ -55,7 +55,7 @@
         })
     })
 </script>
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/tomorrow.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/nord.min.css">
 <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
 @stop

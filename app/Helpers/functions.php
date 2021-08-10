@@ -74,9 +74,8 @@ function GetPostsLists($posts) {
             $html .= $post['modified'];
             $html .= '<hr />';
 
-            $preview = mb_substr($post['content'],0,config('blog.SummaryNum'),'utf-8');
-            $preview = preg_replace('~<~', "(", $preview);
-            $preview = preg_replace('~>~', ")", $preview);
+            $preview = GetSummary($post['content']);
+
             if ($preview != "") {
                 // $html .= '<p class="card-text">' . $preview . '</p>';
                 $html .= '<p class="post-card-text">' . $preview . '</p>';
@@ -111,6 +110,15 @@ function GetPostsLists($posts) {
     }
 	$html .= '</ul></nav>';
     return $html;
+}
+//生成文章摘要
+function GetSummary($post_content) {
+    // 去除文章中的脚本及特殊字符
+    // $post_content = 
+    $preview = mb_substr($post_content,0,config('blog.SummaryNum'),'utf-8');
+    $preview = preg_replace('~<~', "(", $preview);
+    $preview = preg_replace('~>~', ")", $preview);
+    return $preview;
 }
 //查找文章默认封面
 function GetPostCover($post) {

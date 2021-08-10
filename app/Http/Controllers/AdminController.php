@@ -66,7 +66,7 @@ class AdminController extends Controller
     			//存储文件。disk里面的public。总的来说，就是调用disk模块里的public配置
     			Storage::disk('public')->put($filepath, file_get_contents($path));
 
-                return env('APP_URL') . '/storage/' . $filepath;
+                return env('APP_URL') . '/attachments/' . $filepath;
     		}
     	}
     	// return view('upload');
