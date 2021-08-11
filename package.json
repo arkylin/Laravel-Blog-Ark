@@ -10,15 +10,15 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^5.15.3",
-        "@popperjs/core": "^2.9.2",
-        "@vue/compiler-sfc": "^3.1.4",
+        "@fortawesome/fontawesome-free": "^5.15.4",
+        "@popperjs/core": "^2.9.3",
+        "@vue/compiler-sfc": "^3.2.1",
         "axios": "^0.21.1",
-        "bootstrap": "^5.0.2",
+        "bootstrap": "^5.1.0",
         "jquery": "^3.6.0",
-        "laravel-mix": "^6.0.25",
+        "laravel-mix": "^6.0.27",
         "resolve-url-loader": "^4.0.0",
-        "sass": "^1.35.2",
+        "sass": "^1.37.5",
         "sass-loader": "^12.1.0",
         "vue": "^3.1.2",
         "vue-loader": "^16.3.0"
