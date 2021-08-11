@@ -2,7 +2,7 @@
 //获取文章元信息
 function GetPostMetaData($post) {
     $output = "";
-    if (Gate::allows('CheckAdmin')) {
+    if ($post['status'] == 'publish' || Gate::allows('CheckAdmin')) {
         $output = array(
             'id' => $post['id'],
             'slug' => $post['slug'],
@@ -15,22 +15,7 @@ function GetPostMetaData($post) {
             'views' => $post['views'],
             'likes' => $post['likes']
         );
-    } else {
-        if ($post['status'] == 'publish') {
-            $output = array(
-                'id' => $post['id'],
-                'slug' => $post['slug'],
-                'title' => $post['title'],
-                'created' => $post['created'],
-                'modified' => $post['modified'],
-                'content' => $post['content'],
-                'type' => $post['type'],
-                'status' => $post['status'],
-                'views' => $post['views'],
-                'likes' => $post['likes']
-            );
-        }
-    };
+    }
     return $output;
 }
 // 生成文章列表
@@ -129,5 +114,15 @@ function GetPostCover($post) {
     } else {
         return '';
     }
+}
+//输出标题
+function EchoTitle($title) {
+    $out = "";
+    if ( $title !="" ) {
+        $out = $title . " | " . env('APP_NAME');
+    } else {
+        $out = env('APP_NAME');
+    }
+    return $out;
 }
 ?>

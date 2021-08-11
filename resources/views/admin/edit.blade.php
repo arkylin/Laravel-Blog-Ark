@@ -4,12 +4,7 @@
 
 @section('title')
 <?php
-    $MD_title = $post['title'];
-    if ( $MD_title !="" ) {
-        echo $MD_title . " | " . config('blog.Name');
-    } else {
-        echo config('blog.Name');
-    }
+    echo EchoTitle($post['title']);
 ?>
 @stop
 

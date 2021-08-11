@@ -2,18 +2,14 @@
 
 @section('title')
 <?php
-    $MD_title = $post['title'];
-    if ( $MD_title !="" ) {
-        echo $MD_title . " | " . config('blog.Name');
-    } else {
-        echo config('blog.Name');
-    }
+    $post_title = EchoTitle($post['title']);
+    echo $post_title;
 ?>
 @stop
 
 @section('content')
 <article>
-<h2><?php echo $MD_title ?></h2>
+<h2><?php echo $post['title']; ?></h2>
 <div id="preview"><?php echo GetSummary($post['content']); ?></div>
 </article>
 @stop
