@@ -1,4 +1,6 @@
 <?php
+use App\Models\Post;
+
 //获取文章元信息
 function GetPostMetaData($post) {
     $output = "";
@@ -18,12 +20,26 @@ function GetPostMetaData($post) {
     }
     return $output;
 }
+// 获取页面链接
+function GetPageLink($page) {
+    $page_link = env('APP_URL') . '/' . env('FENYEMULU') . '/' . $page . '.html';
+    return $page_link;
+}    
 // 生成文章列表
-function GetPostsLists($posts) {
+function GetPostsLists($posts, $page) {
     $html = "";
-    foreach ($posts['data'] as $post){
-        $post = GetPostMetaData($post);
-        if ($post != "") {
+    $all_posts_num = count($posts);
+    $page = (int)$page;
+    $fenye = (int)env('FENYE');
+    $all_pages_num = ceil($all_posts_num/$fenye);
+    for ($i=1; $i<=$fenye; $i++) {
+        $posts_for_fenye = ($page-1)*$fenye+$i;
+        if ($posts_for_fenye <= count($posts)) {
+            $post_id_for_fenye = $posts[$posts_for_fenye-1]['id'];
+            $post = Post::find($post_id_for_fenye)->toArray();
+        }
+        
+        if (!empty($post)) {
             // $html .= '<div class="card">';
             $html .= '<div class="post-card">';
             if (GetPostCover($post['content']) !== ''){
@@ -41,7 +57,7 @@ function GetPostsLists($posts) {
             if (Gate::allows('CheckAdmin') && url() -> current() != route('home')) {
                 $html .= '<a href=' . url("admin/edit" . "?id=" . $post['id']) . '>' . $post['title'];;
             } else {
-                $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '>' . $post['title'];;
+                $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
             }
             $html .= '</a>';
             if ($post['status'] == 'secret') {
@@ -72,27 +88,27 @@ function GetPostsLists($posts) {
     }
     //生成新页码
     $html .= '<nav><ul class="justify-content-center pagination">';
-    $for_num = -1;
-	if ($posts['from'] > 1){
-		$html .= '<li class="page-item"><a aria-label="首页" class="page-link" href="' . $posts['first_page_url'] . '"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
-	}
-    foreach ($posts['links'] as $link) {
-        $for_num = $for_num + 1;
-        if ($link['url'] !="" && $link['active'] == 1) {
-            $html .= '<li class="page-item active"><span class="page-link" style="cursor: default;">' . $link['label'] . '</span></li>';
-        } elseif ($link['url'] !="" && $link['active'] == "") {
-            if ($for_num == 0){
-                $html .= '<li class="page-item"><a class="page-link" href="' . $link['url'] . '"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
-            } elseif ($for_num == $posts['last_page']+1) {
-                $html .= '<li class="page-item"><a class="page-link" href="' . $link['url'] . '"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
+    $html .= '<li class="page-item"><a aria-label="首页" class="page-link" href="' . env('APP_URL') . '"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
+    if ($page != 1) {
+        $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page-1) . '"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
+    }
+    for ($i=1; $i<=$all_pages_num; $i++) {
+        if ($i >= $page-1 && $i <= $page +3) {
+            if ($i == $page) {
+                $html .= '<li class="page-item active"><span class="page-link" style="cursor: default;">' . $i . '</span></li>';            
             } else {
-                $html .= '<li class="page-item"><a class="page-link" href="' . $link['url'] . '">' . $link['label'] . '</a></li>';
+                if ($i == 1) {
+                    $html .= '<li class="page-item"><a class="page-link" href="' . env('APP_URL') . '">' . $i . '</a></li>';
+                } else {
+                    $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($i) . '">' . $i . '</a></li>';
+                }
             }
         }
     }
-    if ($posts['current_page'] < $posts['last_page']){
-		$html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . $posts['last_page_url'] . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
+    if ($page != $all_pages_num) {
+        $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page+1) . '"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
     }
+    $html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . GetPageLink($page+1) . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
 	$html .= '</ul></nav>';
     return $html;
 }
@@ -115,13 +131,21 @@ function GetPostCover($post) {
         return '';
     }
 }
-//输出标题
+// 输出标题
 function EchoTitle($title) {
     $out = "";
     if ( $title !="" ) {
         $out = $title . " | " . env('APP_NAME');
     } else {
         $out = env('APP_NAME');
+    }
+    return $out;
+}
+// 是否允许百度统计
+function IfEnableBaiduTongji($if) {
+    $out = '';
+    if ($if = 'true') {
+        $out = '<script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?' . env('BAIDU_TONGJI') . '";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s)})();</script>';
     }
     return $out;
 }

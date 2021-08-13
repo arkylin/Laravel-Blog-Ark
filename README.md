@@ -59,3 +59,11 @@
   </system.webServer>
 </configuration>
 ```
+
+## 运行前准备
+```
+npm install
+composer update
+npm run production
+```
+

@@ -12,6 +12,7 @@
         <!-- CSRF -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         @yield('header', "")
+        <?php echo IfEnableBaiduTongji('true'); ?>
     </head>
     <body>
     <script type='text/javascript'>

@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('title')
-<?php echo config('blog.Name') ?>
+<?php echo env('APP_NAME') ?>
 @stop
 
 @section('content')
@@ -9,7 +9,7 @@
 // echo "<pre>";print_r($posts);echo "</pre>";
 ?>
 <?php
-echo GetPostsLists($posts);
+echo GetPostsLists($posts, $page);
 ?>
 @stop
 @section('footer')
