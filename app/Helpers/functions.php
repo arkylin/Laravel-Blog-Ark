@@ -20,11 +20,15 @@ function GetPostMetaData($post) {
     }
     return $output;
 }
-// 获取页面链接
+// 获取分页链接
 function GetPageLink($page) {
     $page_link = env('APP_URL') . '/' . env('FENYEMULU') . '/' . $page . '.html';
     return $page_link;
-}    
+}
+// 获取文章页链接
+function GetPostLink($slug) {
+    return env('APP_URL') . '/posts/' . $slug . '.html';
+}
 // 生成文章列表
 function GetPostsLists($posts, $page) {
     $html = "";
@@ -106,6 +110,7 @@ function GetPostsLists($posts, $page) {
         }
     }
     if ($page != $all_pages_num) {
+        $html .= '<li class="page-item"><span class="page-link" style="cursor: default;">···</span></li>';
         $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page+1) . '"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
     }
     $html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . GetPageLink($page+1) . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
@@ -147,6 +152,30 @@ function IfEnableBaiduTongji($if) {
     if ($if = 'true') {
         $out = '<script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?' . env('BAIDU_TONGJI') . '";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s)})();</script>';
     }
+    return $out;
+}
+// Sitemap Example
+function Sitemap_Example($link, $time, $priority) {
+    $out = '';
+    $out .= '<url>';
+    $out .= '<loc>' . $link . '</loc>';
+    $out .= '<lastmod>' . $time . '</lastmod>';
+    $out .= '<changefreq>always</changefreq>';
+    $out .= '<priority>' . $priority . '</priority>';
+    $out .= '</url>';
+    return $out;
+}
+// Sitemap
+function GetSitemap() {
+    $out = '';
+    $out .= '<?xml version="1.0" encoding="utf-8"?>';
+    $out .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    $posts_slug = Post::select('slug')->addSelect('modified')->where('status','publish')->orderBy('created','desc')->get()->toArray();
+    $out .= Sitemap_Example(env('APP_URL'), substr($posts_slug[0]['modified'],0,10), 1);
+    foreach ($posts_slug as $post_slug) {
+        $out .= Sitemap_Example(GetPostLink($post_slug['slug']), substr($post_slug['modified'],0,10), 0.8);
+    }
+    $out .= '</urlset>';
     return $out;
 }
 ?>

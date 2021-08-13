@@ -36,4 +36,10 @@ class StaticPagesController extends Controller
         // return $posts;
         return view('static_pages/home', ['posts' => $posts, 'page' => $page]);
     }
+
+    public function sitemap()
+    {
+        // return view('static_pages/sitemap')->header("Content-type","text/xml");
+        return response(GetSitemap())->header('Content-Type', 'text/xml');
+    }
 }

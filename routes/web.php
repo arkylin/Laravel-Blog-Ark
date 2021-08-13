@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'StaticPagesController@home')->name('home');
 Route::get('/page/{page}.html', 'StaticPagesController@page')->name('home.page');
+Route::get('/sitemap.xml', 'StaticPagesController@sitemap')->name('sitemap');
 
 Route::get('/admin', 'AdminController@admin')->name('admin_home');
 Route::get('/admin/edit', 'AdminController@edit')->name('admin_edit');
