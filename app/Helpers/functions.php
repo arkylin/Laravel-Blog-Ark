@@ -58,7 +58,7 @@ function GetPostsLists($posts, $page) {
             // Title
             // $html .= '<h5 class="card-title">';
             $html .= '<h5 class="post-card-title">';
-            if (Gate::allows('CheckAdmin') && url() -> current() != route('home')) {
+            if (Gate::allows('CheckAdmin') && url() -> current() != route('home.blog')) {
                 $html .= '<a href=' . url("admin/edit" . "?id=" . $post['id']) . '>' . $post['title'];;
             } else {
                 $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
@@ -117,6 +117,23 @@ function GetPostsLists($posts, $page) {
 	$html .= '</ul></nav>';
     return $html;
 }
+// 生成单个文章卡片
+function GeneratePostCard($post) {
+    $out = '';
+    // $post = Post::find($id);
+    $post_title = $post['title'];
+    $post_cover = GetPostCover($post['content']);
+    $out .= '<div class="gallery">';
+    $out .= '<a target="_blank" href="' . GetPostLink($post['slug']) . '">';
+    if ($post_cover == '') {
+        $post_cover = env('APP_URL') . '/static/img/cross.png';
+    }
+    $out .= '<img data-src="' . $post_cover . '" class="lazy mini-post-cover" alt="' . $post_title . '"' . '>';
+    $out .= '<div class="desc">' . $post_title . '</div>';
+    $out .= '</a>';
+    $out .= '</div>';
+    return $out;
+}
 //生成文章摘要
 function GetSummary($post_content) {
     // 去除文章中的脚本及特殊字符
@@ -128,11 +145,13 @@ function GetSummary($post_content) {
 }
 //查找文章默认封面
 function GetPostCover($post) {
-    $reg_match = '~' . env('APP_URL') . '/attachments' . '.*?(jpg|png|jpeg)' . '~';
+    // $reg_match = '~' . env('APP_URL') . '/static/attachments' . '.*?(jpg|png|jpeg)' . '~';
+    $reg_match = '~' . 'https://' . '.*?(jpg|png|jpeg)' . '~';
     preg_match($reg_match, $post, $match);
     if (!empty($match)) {
         return $match[0];  
     } else {
+        // return env('APP_URL') . '/static/img/cross.png';
         return '';
     }
 }
@@ -178,4 +197,16 @@ function GetSitemap() {
     $out .= '</urlset>';
     return $out;
 }
+// 获取最新文章
+function GetTheNewestPosts() {
+    $out = '';
+    $posts = Post::where('status','publish')->limit(env('SHOW_POSTS_NUM'))->orderBy('created','desc')->get()->toArray();
+    foreach ($posts as $post) {
+        $out .= GeneratePostCard($post);
+    }
+    return $out;
+}
+
+
+
 ?>

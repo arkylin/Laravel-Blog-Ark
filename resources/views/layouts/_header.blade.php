@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
 @if (Auth::check())
-    <b><a class="navbar-brand bold" href="{{ route('home') }}">Arkylin's Blog</a></b>
+    <b><a class="navbar-brand bold" href="{{ route('home') }}"><?php echo env('APP_NAME') ?></a></b>
     <ul class="nav col align-self-end justify-content-end">
         @if (Gate::allows('CheckAdmin'))
             <li><a class="btn" href="{{ route('admin_edit') }}">编辑文章</a></li>

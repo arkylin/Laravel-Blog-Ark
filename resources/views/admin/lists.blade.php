@@ -11,7 +11,7 @@
 <hr class="dropdown-divider">
 
 <?php
-echo GetPostsLists($posts);
+echo GetPostsLists($posts, $page);
 ?>
 
 @stop

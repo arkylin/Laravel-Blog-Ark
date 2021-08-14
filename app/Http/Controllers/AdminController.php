@@ -33,8 +33,8 @@ class AdminController extends Controller
             Post::insert($GetRequest);
             return '提交成功！';
         } else {
-            $posts = Post::orderBy('created','desc')->paginate(20)->toArray();
-            return view('admin/lists', ['posts' => $posts]);
+            $posts = Post::select('id')->orderBy('created','desc')->get()->toArray();
+            return view('admin/lists', ['posts' => $posts, 'page' => 1]);
         }
     }
     
@@ -64,7 +64,7 @@ class AdminController extends Controller
                 $filepath = date("Y",$FileUploadTime) . '/' . date("m",$FileUploadTime) . '/' . $filename;
  
     			//存储文件。disk里面的public。总的来说，就是调用disk模块里的public配置
-    			Storage::disk('public')->put($filepath, file_get_contents($path));
+    			Storage::disk('attachments')->put($filepath, file_get_contents($path));
 
                 return env('APP_URL') . '/attachments/' . $filepath;
     		}

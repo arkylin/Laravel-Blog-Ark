@@ -2,7 +2,7 @@
 <html lang="zh-CN">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>@yield('title', "Arkylin's Blog")</title>
+        <title>@yield('title', env('APP_NAME'))</title>
         <!-- 引入js、css -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <!-- <link rel="stylesheet" href="<?php echo env('ASSETS_URL') ?>/css/app.css"> -->
