@@ -9,7 +9,7 @@
 // echo "<pre>";print_r($posts);echo "</pre>";
 ?>
 <?php
-echo GetPostsLists($posts, $page);
+echo GetPostsLists($posts, $page, $type);
 ?>
 @stop
 @section('footer')

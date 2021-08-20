@@ -2,25 +2,24 @@
 
 @section('content')
 
-<div id="intro" class="home">
+<div class="flash-message">
+    <p class="alert alert-success">
+    网站各种功能正在加速编排中，友链别删！
+    </p>
+</div>
+
+<div id="intro">
     <img src="https://www.xyz.blue/logo" alt="<?php echo env('APP_NAME') ?>" id="logo">
     <h1><?php echo env('ADMIN_NAME') ?></h1>
     <p>I am a student.</p>
+
+    <div id="social-icons">
+        <a href="https://github.com/arkylin"><i class="fab fa-github"></i></a>
+        <a href="https://www.npmjs.com/~arkylin"><i class="fab fa-npm"></i></a>
+    </div>
 </div>
 
-<div id="social-icons" class="home">
-</div>
-
-<div id="blog" class="home">
-    <h1>Blog</h1>
-    <?php echo GetTheNewestPosts() ?>
-    <a href="<?php echo env('APP_URL') ?>/posts"><h1 id="home-add-text">点击查看更多</h1></a>
-</div>
-
-<div id="diary" class="home">
-</div>
-
-<div id="image" class="home">
-</div> 
+<?php echo GetHomeMiniCard('article') ?>
+<?php echo GetHomeMiniCard('diary') ?>
 
 @stop

@@ -14,11 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home')->name('home');
-Route::get('/posts', 'StaticPagesController@home')->name('home.blog');
+Route::get('/{type}.html', 'PostsController@list')->name('posts.list');
+Route::get('/{type}/page/{page}.html', 'PostsController@list')->name('posts.list');
 
-// Route::get('/', 'StaticPagesController@home')->name('home');
-Route::get('/page/{page}.html', 'StaticPagesController@page')->name('home.page');
-Route::get('/sitemap.xml', 'StaticPagesController@sitemap')->name('sitemap');
+Route::get('/sitemap.xml', 'HomeController@sitemap')->name('sitemap');
 
 Route::get('/admin', 'AdminController@admin')->name('admin_home');
 Route::get('/admin/edit', 'AdminController@edit')->name('admin_edit');

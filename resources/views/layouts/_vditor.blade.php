@@ -175,7 +175,7 @@
         var FileName = document.getElementById('photoFile').files[0].name
         // formData.append('time', CTime);
         $.ajax({
-            url:"https://blog.xyz.blue/admin/upload",
+            url:"<?php echo env('APP_URL') ?>/admin/upload",
             type:"post",
             async: false,
             data: formData,

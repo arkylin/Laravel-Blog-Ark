@@ -10,4 +10,9 @@ class HomeController extends Controller
     {
         return view('home.index');
     }
+    public function sitemap()
+    {
+        // return view('static_pages/sitemap')->header("Content-type","text/xml");
+        return response(GetSitemap())->header('Content-Type', 'text/xml');
+    }
 }

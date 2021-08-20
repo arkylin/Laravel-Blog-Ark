@@ -1,6 +1,4 @@
 <?php
-use App\Models\Post;
-
 //获取文章元信息
 function GetPostMetaData($post) {
     $output = "";
@@ -21,8 +19,18 @@ function GetPostMetaData($post) {
     return $output;
 }
 // 获取分页链接
-function GetPageLink($page) {
-    $page_link = env('APP_URL') . '/' . env('FENYEMULU') . '/' . $page . '.html';
+function GetPageLink($page, $type) {
+    if ($type != 'admin') {
+        if ($page == 1) {
+            $page_link = env('APP_URL') . '/' . $type . '.html';
+        }
+        $page_link = env('APP_URL') . '/' . $type . '/' . env('FENYEMULU') . '/' . $page . '.html';
+    } else {
+        if ($page == 1) {
+            $page_link = env('APP_URL') . '/' . $type . '/edit';
+        }
+        $page_link = env('APP_URL') . '/' . $type . '/edit?page=' . $page;
+    }
     return $page_link;
 }
 // 获取文章页链接
@@ -30,7 +38,7 @@ function GetPostLink($slug) {
     return env('APP_URL') . '/posts/' . $slug . '.html';
 }
 // 生成文章列表
-function GetPostsLists($posts, $page) {
+function GetPostsLists($posts, $page=1, $type=0) {
     $html = "";
     $all_posts_num = count($posts);
     $page = (int)$page;
@@ -40,7 +48,7 @@ function GetPostsLists($posts, $page) {
         $posts_for_fenye = ($page-1)*$fenye+$i;
         if ($posts_for_fenye <= count($posts)) {
             $post_id_for_fenye = $posts[$posts_for_fenye-1]['id'];
-            $post = Post::find($post_id_for_fenye)->toArray();
+            $post = App\Models\Post::find($post_id_for_fenye)->toArray();
         }
         
         if (!empty($post)) {
@@ -58,7 +66,8 @@ function GetPostsLists($posts, $page) {
             // Title
             // $html .= '<h5 class="card-title">';
             $html .= '<h5 class="post-card-title">';
-            if (Gate::allows('CheckAdmin') && url() -> current() != route('home.blog')) {
+            if (Gate::allows('CheckAdmin') && url() -> current() != route('posts.list', ['page' => $page, 'type' => $type])) {
+            // if (Gate::allows('CheckAdmin')) {
                 $html .= '<a href=' . url("admin/edit" . "?id=" . $post['id']) . '>' . $post['title'];;
             } else {
                 $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
@@ -92,28 +101,27 @@ function GetPostsLists($posts, $page) {
     }
     //生成新页码
     $html .= '<nav><ul class="justify-content-center pagination">';
-    $html .= '<li class="page-item"><a aria-label="首页" class="page-link" href="' . env('APP_URL') . '"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
+    if ($type == 0 && Gate::allows('CheckAdmin')) {
+        $type = 'admin';
+    }
+    $html .= '<li class="page-item"><a aria-label="首页" class="page-link" href="' . GetPageLink(1, $type) . '"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
     if ($page != 1) {
-        $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page-1) . '"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
+        $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page-1, $type) . '"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
     }
     for ($i=1; $i<=$all_pages_num; $i++) {
         if ($i >= $page-1 && $i <= $page +3) {
             if ($i == $page) {
                 $html .= '<li class="page-item active"><span class="page-link" style="cursor: default;">' . $i . '</span></li>';            
             } else {
-                if ($i == 1) {
-                    $html .= '<li class="page-item"><a class="page-link" href="' . env('APP_URL') . '">' . $i . '</a></li>';
-                } else {
-                    $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($i) . '">' . $i . '</a></li>';
-                }
+                $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($i, $type) . '">' . $i . '</a></li>';
             }
         }
     }
     if ($page != $all_pages_num) {
         $html .= '<li class="page-item"><span class="page-link" style="cursor: default;">···</span></li>';
-        $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page+1) . '"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
+        $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page+1 ,$type) . '"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
     }
-    $html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . GetPageLink($page+1) . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
+    $html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . GetPageLink($page+1, $type) . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
 	$html .= '</ul></nav>';
     return $html;
 }
@@ -189,7 +197,7 @@ function GetSitemap() {
     $out = '';
     $out .= '<?xml version="1.0" encoding="utf-8"?>';
     $out .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    $posts_slug = Post::select('slug')->addSelect('modified')->where('status','publish')->orderBy('created','desc')->get()->toArray();
+    $posts_slug = App\Models\Post::select('slug')->addSelect('modified')->where('status','publish')->orderBy('created','desc')->get()->toArray();
     $out .= Sitemap_Example(env('APP_URL'), substr($posts_slug[0]['modified'],0,10), 1);
     foreach ($posts_slug as $post_slug) {
         $out .= Sitemap_Example(GetPostLink($post_slug['slug']), substr($post_slug['modified'],0,10), 0.8);
@@ -197,14 +205,40 @@ function GetSitemap() {
     $out .= '</urlset>';
     return $out;
 }
+function GetPostsTotal($type) {
+    return count(App\Models\Post::select('id')->where('type',$type)->where('status','publish')->get()->toArray());
+}
 // 获取最新文章
-function GetTheNewestPosts() {
+function GetTheNewestPosts($type) {
     $out = '';
-    $posts = Post::where('status','publish')->limit(env('SHOW_POSTS_NUM'))->orderBy('created','desc')->get()->toArray();
+    $posts = App\Models\Post::where('type',$type)->where('status','publish')->limit(env('SHOW_POSTS_NUM'))->orderBy('created','desc')->get()->toArray();
     foreach ($posts as $post) {
         $out .= GeneratePostCard($post);
     }
     return $out;
+}
+// 首页卡片
+function GetHomeMiniCard($type) {
+    $out = '';
+    $out .= '<div id="' . $type . '" class="home">';
+    $out .= '<div class="mini-topbar">';
+    $out .= '<ul><li><p>' . GetHomeMiniCardInChinese($type) . '</p></li><li>';
+    $out .= '<a href="' . env('APP_URL') . '/' . $type . '.html">';
+    if (GetPostsTotal($type) > env('SHOW_POSTS_NUM')) {
+        $out .= '还有' . GetPostsTotal($type)-env('SHOW_POSTS_NUM') . '篇文章 ';
+    }
+    $out .= '<i class="fas fa-chevron-right"></i></a></li></ul></div>';
+    $out .= GetTheNewestPosts($type);
+    $out .= '</div>';
+    return $out;
+}
+// $type对应中文名
+function GetHomeMiniCardInChinese($type) {
+    if ($type == 'article') {
+        return '最新文章';
+    } elseif ($type == 'diary') {
+        return '日记';
+    }
 }
 
 

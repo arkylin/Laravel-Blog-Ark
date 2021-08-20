@@ -34,6 +34,9 @@ class AdminController extends Controller
             return '提交成功！';
         } else {
             $posts = Post::select('id')->orderBy('created','desc')->get()->toArray();
+            if (array_key_exists('page', $GetRequest)) {
+                return view('admin/lists', ['posts' => $posts, 'page' => (int)$GetRequest['page']]);
+            }
             return view('admin/lists', ['posts' => $posts, 'page' => 1]);
         }
     }
@@ -61,12 +64,12 @@ class AdminController extends Controller
  
     			//定义文件名 uniqid()
     			$filename = $FileUploadTime.'.'.$ext;
-                $filepath = date("Y",$FileUploadTime) . '/' . date("m",$FileUploadTime) . '/' . $filename;
+                $filepath = 'attachments/' . date("Y",$FileUploadTime) . '/' . date("m",$FileUploadTime) . '/' . $filename;
  
     			//存储文件。disk里面的public。总的来说，就是调用disk模块里的public配置
-    			Storage::disk('attachments')->put($filepath, file_get_contents($path));
+    			Storage::disk('static')->put($filepath, file_get_contents($path));
 
-                return env('APP_URL') . '/attachments/' . $filepath;
+                return env('APP_URL') . '/static/' . $filepath;
     		}
     	}
     	// return view('upload');
