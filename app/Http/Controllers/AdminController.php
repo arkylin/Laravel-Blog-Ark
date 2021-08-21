@@ -4,20 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Config;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use App\Policies\UserPolicy;
 
-class AdminController extends Controller
-{
-    public function admin()
-    {
+class AdminController extends Controller {
+    public function admin() {
         return view('admin/main');
     }
 
-    public function edit(Request $action, User $user)
-    {
+    public function edit(Request $action, User $user) {
         $this->authorize('CheckAdmin', $user);
         $GetRequest = $action->all();
         if (array_key_exists('id', $GetRequest) && !array_key_exists('content', $GetRequest)) {
@@ -35,9 +33,9 @@ class AdminController extends Controller
         } else {
             $posts = Post::select('id')->orderBy('created','desc')->get()->toArray();
             if (array_key_exists('page', $GetRequest)) {
-                return view('admin/lists', ['posts' => $posts, 'page' => (int)$GetRequest['page']]);
+                return view('admin/lists', ['posts' => $posts, 'page' => (int)$GetRequest['page'], 'type' => 'admin']);
             }
-            return view('admin/lists', ['posts' => $posts, 'page' => 1]);
+            return view('admin/lists', ['posts' => $posts, 'page' => 1, 'type' => 'admin']);
         }
     }
     
@@ -73,5 +71,19 @@ class AdminController extends Controller
     		}
     	}
     	// return view('upload');
+    }
+
+    public function config(Request $action, User $user) {
+        $this->authorize('CheckAdmin', $user);
+        $GetRequest = $action->all();
+        $config = Config::get()->toArray();
+        if (empty($GetRequest) || array_key_exists('new', $GetRequest)) {
+            return view('admin/config',['config' => $config]);
+        } else {
+            foreach ($config as $conf) {
+                Config::where('name', $conf['name'])->update(['value' => $GetRequest[$conf['name']]]);
+            }
+            redirect(url()->current() . '?new');
+        }
     }
 }

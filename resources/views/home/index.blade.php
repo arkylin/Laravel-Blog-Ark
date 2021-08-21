@@ -9,13 +9,19 @@
 </div>
 
 <div id="intro">
-    <img src="https://www.xyz.blue/logo" alt="<?php echo env('APP_NAME') ?>" id="logo">
-    <h1><?php echo env('ADMIN_NAME') ?></h1>
-    <p>I am a student.</p>
+    <img src="<?php if (GetConfig('SiteLogo') !='') { echo GetConfig('SiteLogo'); } ?>" alt="{{ GetConfig('SiteName') }}" id="logo">
+    <h1>{{ GetConfig('AuthorName') }}</h1>
+    <p>{{ GetConfig('AuthorWords') }}</p>
 
     <div id="social-icons">
-        <a href="https://github.com/arkylin"><i class="fab fa-github"></i></a>
-        <a href="https://www.npmjs.com/~arkylin"><i class="fab fa-npm"></i></a>
+        <?php
+            if (GetConfig('GithubName') != '') {
+                echo '<a href="https://github.com/' . GetConfig('GithubName') . '"><i class="fab fa-github"></i></a>';
+            }
+            if (GetConfig('NPMName') != '') {
+                echo '<a href="https://www.npmjs.com/~' . GetConfig('NPMName') . '"><i class="fab fa-npm"></i></a>';
+            }
+        ?>
     </div>
 </div>
 

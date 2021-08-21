@@ -1,4 +1,16 @@
 <?php
+// 获取博客信息
+function GetConfig($name) {
+    $out = App\Models\Config::where('name', $name)->get();
+    if ($out[0]->bool == false) {
+        return '';
+    }
+    if (!empty($out)) {
+        return $out[0]->value;
+    } else {
+        return 'Null';
+    }
+}
 //获取文章元信息
 function GetPostMetaData($post) {
     $output = "";
@@ -20,16 +32,33 @@ function GetPostMetaData($post) {
 }
 // 获取分页链接
 function GetPageLink($page, $type) {
-    if ($type != 'admin') {
-        if ($page == 1) {
-            $page_link = env('APP_URL') . '/' . $type . '.html';
+    // if ($type == 'admin') {
+    //     if ($page == 1) {
+    //         $page_link = env('APP_URL') . '/' . $type . '/edit';
+    //     }
+    //     $page_link = env('APP_URL') . '/' . $type . '/edit?page=' . $page;
+    // } elseif ($type == 'search') {
+    //     if ($page == 1) {
+    //         $page_link = url() -> current();;
+    //     }
+    //     $page_link = env('APP_URL') . '/' . $type . '/' . env('FENYEMULU') . '/' . $page . '.html';
+    // } else {
+        // if ($page == 1) {
+        //     $page_link = env('APP_URL') . '/' . $type . '.html';
+        // }
+        // $page_link = env('APP_URL') . '/' . $type . '/' . env('FENYEMULU') . '/' . $page . '.html';
+    // }
+    if ($type == 'search') {
+        $page_link = preg_replace('~\&page=.*[0-9]~','',url()->full());
+        if ($page != 1) {
+            $page_link = $page_link . '&page=' . $page;
         }
-        $page_link = env('APP_URL') . '/' . $type . '/' . env('FENYEMULU') . '/' . $page . '.html';
     } else {
         if ($page == 1) {
-            $page_link = env('APP_URL') . '/' . $type . '/edit';
+            $page_link = url()->current();
+        } else {
+            $page_link = url()->current() . '?page=' . $page;
         }
-        $page_link = env('APP_URL') . '/' . $type . '/edit?page=' . $page;
     }
     return $page_link;
 }
@@ -38,7 +67,7 @@ function GetPostLink($slug) {
     return env('APP_URL') . '/posts/' . $slug . '.html';
 }
 // 生成文章列表
-function GetPostsLists($posts, $page=1, $type=0) {
+function GetPostsLists($posts, $page, $type) {
     $html = "";
     $all_posts_num = count($posts);
     $page = (int)$page;
@@ -66,12 +95,13 @@ function GetPostsLists($posts, $page=1, $type=0) {
             // Title
             // $html .= '<h5 class="card-title">';
             $html .= '<h5 class="post-card-title">';
-            if (Gate::allows('CheckAdmin') && url() -> current() != route('posts.list', ['page' => $page, 'type' => $type])) {
-            // if (Gate::allows('CheckAdmin')) {
-                $html .= '<a href=' . url("admin/edit" . "?id=" . $post['id']) . '>' . $post['title'];;
-            } else {
-                $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
-            }
+            // if (Gate::allows('CheckAdmin') && url() -> current() != route('posts.list', ['page' => $page, 'type' => $type])) {
+            // // if (Gate::allows('CheckAdmin')) {
+            //     $html .= '<a href=' . url("admin/edit" . "?id=" . $post['id']) . '>' . $post['title'];;
+            // } else {
+            //     $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
+            // }
+            $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
             $html .= '</a>';
             if ($post['status'] == 'secret') {
                 $html .= ' | <i class="fas fa-user-lock"></i>';

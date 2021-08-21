@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Gate;
@@ -39,9 +39,35 @@ class PostsController extends Controller
             }
         }
     }
-
-    public function list($type, $page=1)
+    public function search(Request $action) {
+        $GetRequest = $action->all();
+        if (array_key_exists('keyword',$GetRequest)) {
+            $keyword = '%'.$GetRequest['keyword'].'%';
+            $posts = Post::select('id')->where('title','like',$keyword)->orWhere('content','like',$keyword)->get()->toArray();
+            return view('posts/list',[
+                'posts'  => $posts
+            ]);
+        }
+    }
+    public function list($type, Request $action)
     {
+        $GetRequest = $action->all();
+        if (array_key_exists('page', $GetRequest)) {
+            $page = (int)$GetRequest['page'];
+        } else {
+            $page = 1;
+        }
+        if ($type == 'search') {
+            if (array_key_exists('keyword',$GetRequest)) {
+                $keyword = '%'.$GetRequest['keyword'].'%';
+                $posts = Post::select('id')->where('title','like',$keyword)->orWhere('content','like',$keyword)->get()->toArray();
+                return view('posts/list',[
+                    'posts'  => $posts,
+                    'page' => $page,
+                    'type' => $type
+                ]);
+            }
+        }
         // $posts = Post::orderBy('created','desc')->limit(20)->get();
         if (Gate::allows('CheckAdmin')) {
             $posts = Post::select('id')->where('type', $type)->orderBy('created','desc')->get()->toArray();

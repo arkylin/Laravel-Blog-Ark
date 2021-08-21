@@ -14,12 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home')->name('home');
+// Route::get('/search.html', 'HomeController@search')->name('search');
+
 Route::get('/{type}.html', 'PostsController@list')->name('posts.list');
-Route::get('/{type}/page/{page}.html', 'PostsController@list')->name('posts.list');
+// Route::get('/{type}/page/{page}.html', 'PostsController@list')->name('posts.list');
 
 Route::get('/sitemap.xml', 'HomeController@sitemap')->name('sitemap');
 
 Route::get('/admin', 'AdminController@admin')->name('admin_home');
+Route::get('/admin/config', 'AdminController@config')->name('admin_config');
+Route::post('/admin/config', 'AdminController@config')->name('admin_config_post');
+
 Route::get('/admin/edit', 'AdminController@edit')->name('admin_edit');
 Route::post('/admin/edit', 'AdminController@edit')->name('admin_edit_post');
 Route::post('/admin/upload', 'AdminController@upload')->name('admin_upload');

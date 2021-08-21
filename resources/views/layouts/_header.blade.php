@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light">
 @if (Auth::check())
-    <b><a class="navbar-brand bold" href="{{ route('home') }}"><?php echo env('APP_NAME') ?></a></b>
+    <b><a class="navbar-brand bold" href="{{ route('home') }}">{{ GetConfig('SiteName') }}</a></b>
     <ul class="nav col align-self-end justify-content-end">
         @if (Gate::allows('CheckAdmin'))
             <li><a class="btn" href="{{ route('admin_edit') }}">编辑文章</a></li>
+            <li><a class="btn" href="{{ route('admin_config') }}">配置博客</a></li>
         @endif
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
@@ -28,9 +29,9 @@
             </ul>
         </li>
 @else
-    <a class="navbar-brand" href="{{ route('home') }}">Arkylin's Blog</a>
+    <a class="navbar-brand" href="{{ route('home') }}">{{ GetConfig('SiteName') }}</a>
     <ul class="nav col align-self-end justify-content-end">
-        <li class="nav-item" ><a class="nav-link" href="{{ route('login') }}">登录</a></li>
+        <!-- <li class="nav-item" ><a class="nav-link" href="{{ route('login') }}">登录</a></li> -->
 @endif
     </ul>
 </nav>
