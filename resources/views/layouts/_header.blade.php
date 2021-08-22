@@ -33,5 +33,10 @@
     <ul class="nav col align-self-end justify-content-end">
         <!-- <li class="nav-item" ><a class="nav-link" href="{{ route('login') }}">登录</a></li> -->
 @endif
+
+    <form class="d-flex" method="GET" action="{{ route('posts.list',['type' => 'search']) }}">
+        <input class="form-control me-2" type="search" placeholder="键入搜索" name="keyword" aria-label="搜索">
+        <button class="btn btn-outline-success" style="white-space: nowrap;" type="submit">搜索</button>
+    </form>
     </ul>
 </nav>

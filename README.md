@@ -1,7 +1,13 @@
 # 这里是Arkylin的自建博客系统
-
+## 预览
+![首页](https://www.xyz.blue/static/attachments/2021/08/1629646418.png)
+## 运行前准备
+```
+npm install
+composer update
+npm run production
+```
 ## 设置伪静态
-
 在```public```目录下设置
 
 ```Apache```
@@ -59,11 +65,3 @@
   </system.webServer>
 </configuration>
 ```
-
-## 运行前准备
-```
-npm install
-composer update
-npm run production
-```
-

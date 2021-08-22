@@ -64,7 +64,8 @@ class PostsController extends Controller
                 return view('posts/list',[
                     'posts'  => $posts,
                     'page' => $page,
-                    'type' => $type
+                    'type' => $type,
+                    'keyword' => $keyword
                 ]);
             }
         }

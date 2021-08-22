@@ -1,14 +1,18 @@
 <?php
 // 获取博客信息
 function GetConfig($name) {
-    $out = App\Models\Config::where('name', $name)->get();
-    if ($out[0]->bool == false) {
-        return '';
-    }
-    if (!empty($out)) {
-        return $out[0]->value;
+    $out = App\Models\Config::where('name', $name)->get()->toArray();
+    if(!empty($out)) {
+        if ($out[0]['bool'] == false) {
+            return '';
+        }
+        if (!empty($out)) {
+            return $out[0]['value'];
+        } else {
+            return 'Null';
+        }
     } else {
-        return 'Null';
+        return '';
     }
 }
 //获取文章元信息
@@ -95,6 +99,7 @@ function GetPostsLists($posts, $page, $type) {
             // Title
             // $html .= '<h5 class="card-title">';
             $html .= '<h5 class="post-card-title">';
+            
             // if (Gate::allows('CheckAdmin') && url() -> current() != route('posts.list', ['page' => $page, 'type' => $type])) {
             // // if (Gate::allows('CheckAdmin')) {
             //     $html .= '<a href=' . url("admin/edit" . "?id=" . $post['id']) . '>' . $post['title'];;
@@ -104,10 +109,13 @@ function GetPostsLists($posts, $page, $type) {
             $html .= '<a href=' . url("posts" . "/" . $post['slug']) . '.html' . '>' . $post['title'];;
             $html .= '</a>';
             if ($post['status'] == 'secret') {
-                $html .= ' | <i class="fas fa-user-lock"></i>';
+                $html .= ' <i class="fas fa-user-lock"></i>';
             }
             if ($post['status'] == 'unpublish') {
-                $html .= ' | <i class="fas fa-pencil-ruler"></i>';
+                $html .= ' <i class="fas fa-pencil-ruler"></i>';
+            }
+            if (Gate::allows('CheckAdmin')) {
+                $html .= ' | <a href=' . url("admin/edit" . "?id=" . $post['id']) . '><i class="fas fa-user-edit"></i></a>';
             }
             $html .= '</h5>';
             // Title End
@@ -134,8 +142,11 @@ function GetPostsLists($posts, $page, $type) {
     if ($type == 0 && Gate::allows('CheckAdmin')) {
         $type = 'admin';
     }
-    $html .= '<li class="page-item"><a aria-label="首页" class="page-link" href="' . GetPageLink(1, $type) . '"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
+    // if ($page > 1) {
+        
+    // }
     if ($page != 1) {
+        $html .= '<li class="page-item"><a aria-label="首页" class="page-link" href="' . GetPageLink(1, $type) . '"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>';
         $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page-1, $type) . '"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>';
     }
     for ($i=1; $i<=$all_pages_num; $i++) {
@@ -151,7 +162,9 @@ function GetPostsLists($posts, $page, $type) {
         $html .= '<li class="page-item"><span class="page-link" style="cursor: default;">···</span></li>';
         $html .= '<li class="page-item"><a class="page-link" href="' . GetPageLink($page+1 ,$type) . '"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>';
     }
-    $html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . GetPageLink($page+1, $type) . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
+    if ($page < $all_pages_num) {
+        $html .= '<li class="page-item"><a aria-label="尾页" class="page-link" href="' . GetPageLink($all_pages_num, $type) . '"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>';
+    }
 	$html .= '</ul></nav>';
     return $html;
 }
