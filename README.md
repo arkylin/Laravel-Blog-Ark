@@ -1,6 +1,42 @@
-# 这里是Arkylin的自建博客系统
-## 预览
-![首页](https://www.xyz.blue/static/attachments/2021/08/1629646418.png)
+# 代号：Ark
+
+这个博客是基于**Laravel**框架搭建的
+
+手制版 [见我的Github](https://github.com/arkylin/Blog) 所以很多功能还需要慢慢添加
+
+* [x] 首页
+
+![main.png](https://www.xyz.blue/static/attachments/2021/08/1629646418.png)
+
+* [x] 文章页
+* [x] 支持隐私文章
+  
+  ![QQ截图20210822234119.png](https://www.xyz.blue/static/attachments/2021/08/1629646847.png)
+* [x] 支持草稿
+* [x] 后台上传图片
+  
+  ![QQ截图20210822234017.png](https://www.xyz.blue/static/attachments/2021/08/1629646775.png)
+* [x] 分页
+* [x] 搜索
+  
+  ![QQ截图20210822233952.png](https://www.xyz.blue/static/attachments/2021/08/1629646753.png)
+* [x] 静态化链接
+  
+  ![20210822233843.png](https://www.xyz.blue/static/attachments/2021/08/1629646734.png)
+* [x] 后台编辑
+* [x] 后台配置站点
+  
+  ![20210822233802.png](https://www.xyz.blue/static/attachments/2021/08/1629646651.png)
+
+---
+
+待添加
+
+* [ ] 美化
+* [ ] 独立页面
+* [ ] 友链
+* [ ] COS/OSS/S3图片存储
+
 ## 运行前准备
 ```
 npm install
