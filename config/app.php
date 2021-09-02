@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://code.xyz.blue'),
+    'url' => env('APP_URL', null),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -175,6 +175,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        // 腾讯云COS
+        Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class,
 
     ],
 

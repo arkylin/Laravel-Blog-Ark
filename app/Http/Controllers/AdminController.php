@@ -65,9 +65,13 @@ class AdminController extends Controller {
                 $filepath = 'attachments/' . date("Y",$FileUploadTime) . '/' . date("m",$FileUploadTime) . '/' . $filename;
  
     			//存储文件。disk里面的public。总的来说，就是调用disk模块里的public配置
-    			Storage::disk('static')->put($filepath, file_get_contents($path));
-
-                return env('APP_URL') . '/static/' . $filepath;
+                if (env('ASSETS_URL') != '' && env('COSV5_SECRET_KEY') != '') {
+                    Storage::disk('cosv5')->put($filepath, file_get_contents($path));
+                    return env('ASSETS_URL') . '/' . $filepath;
+                } else {
+                    Storage::disk('static')->put($filepath, file_get_contents($path));
+                    return env('APP_URL') . '/static/' . $filepath;
+                }
     		}
     	}
     	// return view('upload');
