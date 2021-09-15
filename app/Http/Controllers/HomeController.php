@@ -16,4 +16,12 @@ class HomeController extends Controller
         // return view('static_pages/sitemap')->header("Content-type","text/xml");
         return response(GetSitemap())->header('Content-Type', 'text/xml');
     }
+
+    public function friends() {
+        return view('home.friends');
+    }
+
+    public function aboutme() {
+        return view('home.aboutme');
+    }
 }

@@ -137,7 +137,32 @@ div.gallery img {
     height: 100px;
 }
 
+@media screen and (min-width: 768px) {
+    div.gallery img {
+        width: 100%;
+        height: 180px;
+    }
+}
+
+
 div.desc {
     padding: 15px;
     text-align: center;
+}
+
+/* 友链 */
+.friend-card {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 155px;
+    padding: 5px;
+    border-radius:8px;
+    text-align: center;
+}
+
+.friend-card img {
+    padding: 6px;
+    width: 100%;
+    height: 100px;
 }

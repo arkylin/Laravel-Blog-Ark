@@ -4,7 +4,7 @@
 
 <div class="flash-message">
     <p class="alert alert-success">
-    网站各种功能正在加速编排中，友链别删！
+    {{ GetConfig('Notice') }}
     </p>
 </div>
 

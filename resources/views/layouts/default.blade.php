@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>@yield('title', GetConfig('SiteName') . ' | ' . GetConfig('SiteDesc'))</title>
         <!-- 引入js、css -->

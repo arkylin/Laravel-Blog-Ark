@@ -203,6 +203,10 @@ function GetPostCover($post) {
         return $match[0];  
     } else {
         // return env('APP_URL') . '/static/img/cross.png';
+        // return '';
+        if (env('ASSETS_URL') !== '') {
+            return env('ASSETS_URL') . '/img/random/bing-2020-2021-compressed/' . rand(1,268) . '.jpg';
+        }
         return '';
     }
 }
@@ -283,7 +287,25 @@ function GetHomeMiniCardInChinese($type) {
         return '日记';
     }
 }
-
+// 获取友链
+function GetFriendsLinks() {
+    $friends = App\Models\Friend::get()->toArray();
+    $out = '';
+    $out .= '<div id="friends">';
+    foreach ($friends AS $friend) {
+        $out .= '<div class="friend-card">';
+        $out .= '<a href="' . $friend['link'] . '" style="text-decoration:none;">';
+        $out .= '<img src="' . $friend['logo'] .'" alt="' . $friend['name'] . '">';
+        $out .= '<h5 class="friend-card-title">' . $friend['name'] . '</h5>';
+        $out .= '</a>';
+        if ($friend['words'] !== '') {
+            $out .= '<p class="friend-card-text">' . $friend['words'] . '</p>';
+        }
+        $out .= '</div>';
+    }
+    $out .= '</div>';
+    return $out;
+}
 
 
 ?>

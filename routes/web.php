@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home')->name('home');
+Route::get('/friends.html', 'HomeController@friends')->name('friends');
+Route::get('/aboutme.html', 'HomeController@aboutme')->name('aboutme');
 // Route::get('/search.html', 'HomeController@search')->name('search');
 
 Route::get('/{type}.html', 'PostsController@list')->name('posts.list');
