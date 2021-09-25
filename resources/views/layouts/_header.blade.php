@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light">
+<nav class="navbar navbar-expand-lg navbar-light" id="topbar">
 <b><a class="navbar-brand bold" href="{{ route('home') }}">{{ GetConfig('SiteName') }}</a></b>
 <ul class="nav col align-self-end justify-content-end">
 <li><a class="btn" href="{{ route('friends') }}">友人帐</a></li>

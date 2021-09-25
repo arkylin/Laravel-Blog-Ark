@@ -6,7 +6,7 @@
         <title>@yield('title', GetConfig('SiteName') . ' | ' . GetConfig('SiteDesc'))</title>
         <!-- 引入js、css -->
         <!-- VUE -->
-        <script src="{{ env('ASSETS_URL') }}/static/Vue/vue.runtime.global.prod.js"></script>
+        <script src="{{ env('ASSETS_URL') }}/static/Vue/vue.global.js"></script>
         <!-- Bootstrap -->
         <link href="{{ env('ASSETS_URL') }}/static/Bootstrap/bootstrap.min.css" rel="stylesheet">
         <script src="{{ env('ASSETS_URL') }}/static/Bootstrap/bootstrap.bundle.min.js"></script>
@@ -19,6 +19,7 @@
         <!-- <script src="{{ env('ASSETS_URL') }}/static/FontAwesome/js/all.min.js"></script> -->
         <!-- 自定义 -->
         <link rel="stylesheet" href="{{ url('static/css/main.css') }}">
+        <script src="{{ url('static/js/main.js') }}"></script>
         <!-- MIX -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <!-- <script src="mix('js/app.js')"></script> -->
