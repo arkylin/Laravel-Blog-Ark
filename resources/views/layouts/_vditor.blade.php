@@ -162,8 +162,8 @@ const client = new OSS({
     // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
     region: 'oss-cn-shanghai',
     // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
-    accessKeyId: 'LTAI5tRp6VTHWQMJWFdUbZEy',
-    accessKeySecret: 'TBhIKJK9i54rXM1651QySozdmpK1vg',
+    accessKeyId: '<?php echo env("ALIYUN_ACCESS_ID"); ?>',
+    accessKeySecret: '<?php echo env("ALIYUN_ACCESS_KEY"); ?>',
     // 填写Bucket名称。
     bucket: 'assets-xyz-blue'
 });

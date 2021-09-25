@@ -28,6 +28,7 @@ class PostsController extends Controller
         } elseif ($way == "post_api") {
             $post = Post::where('id', $post)->get();
             $PostMetaData = GetPostMetaData($post[0]);
+            Post::where('id', $post)->update(['views' => (int)$post['views'] + 1]);
             if (count($post) != 0) {
                 if ($PostMetaData != "") {
                     return view('posts.showapi', ['post' => $PostMetaData]);
