@@ -37,7 +37,7 @@ return [
 
         'static' => [
             'driver' => 'local',
-            'root' => storage_path('app/static'),
+            'root' => storage_path('static'),
             'url' => env('APP_URL').'/static',
             'visibility' => 'public',
         ],
@@ -51,7 +51,7 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
-        
+
         'cosv5' => [
             'driver' => 'cosv5',
             'region'          => env('COSV5_REGION'),
@@ -85,7 +85,7 @@ return [
     */
 
     'links' => [
-        public_path('static') => storage_path('app/static'),
+        public_path('static') => storage_path('static'),
     ],
 
 ];

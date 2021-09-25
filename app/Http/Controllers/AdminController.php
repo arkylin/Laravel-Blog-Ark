@@ -72,6 +72,8 @@ class AdminController extends Controller {
                     Storage::disk('static')->put($filepath, file_get_contents($path));
                     return env('APP_URL') . '/static/' . $filepath;
                 }
+                // Storage::disk('oss')->put($filepath, file_get_contents($path));
+                // return env('ASSETS_URL') . '/' . $filepath;
     		}
     	}
     	// return view('upload');

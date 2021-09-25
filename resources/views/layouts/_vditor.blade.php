@@ -155,6 +155,19 @@
 </script>
 
 <div class="container">
+<!-- 引入在线资源 -->
+<script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-6.8.0.min.js"></script>
+<script>
+const client = new OSS({
+    // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
+    region: 'oss-cn-shanghai',
+    // 从STS服务获取的临时访问密钥（AccessKey ID和AccessKey Secret）。
+    accessKeyId: 'LTAI5tRp6VTHWQMJWFdUbZEy',
+    accessKeySecret: 'TBhIKJK9i54rXM1651QySozdmpK1vg',
+    // 填写Bucket名称。
+    bucket: 'assets-xyz-blue'
+});
+</script>              
 <a href="javascript:void(0)" onclick="uploadPhoto()">选择图片</a>
 <input type="file" id="photoFile" style="display: none;" onchange="upload()">
 <script>
@@ -170,27 +183,47 @@
             return;
         }
         // var CTime = Math.round(new Date());
-        var formData = new FormData();
-        formData.append('photo', document.getElementById('photoFile').files[0]);
-        var FileName = document.getElementById('photoFile').files[0].name
-        // formData.append('time', CTime);
-        $.ajax({
-            url:"<?php echo env('APP_URL') ?>/admin/upload",
-            type:"post",
-            async: false,
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                if (data !== '') {
-                    content = "<img src='"+ data +"' alt=" + FileName +">";
-                    window.vditor.insertValue(content);
-                }
-            },
-            error:function(data) {
-                alert("上传失败")
+        // var formData = new FormData();
+        // formData.append('photo', document.getElementById('photoFile').files[0]);
+        const data = document.getElementById('photoFile').files[0];
+        // var FileName = document.getElementById('photoFile').files[0].name
+        async function put () {
+            try {
+                // object表示上传到OSS的文件名称。
+                // file表示浏览器中需要上传的文件，支持HTML5 file和Blob类型。
+                var now = new Date();
+                month = now.getMonth();
+                month = month + 1;
+                if (month < 10) month = "0" + month;
+                var filename = 'attachments' + '/' + now.getFullYear() + '/' +  month + '/' + now.getTime() + '.' + data.name.split(".")[1];
+                const r1 = await client.put(filename, data);
+                var link = "<?php if (env('ASSETS_URL') !== '') { echo env('ASSETS_URL'); } ?>" + '/' + filename;
+                content = "<img src='"+ link +"' alt=" + data.name +">";
+                window.vditor.insertValue(content);
+                console.log('put success: %j', r1);
+            } catch (e) {
+                console.error('error: %j', e);
             }
-        });
+        }
+        put();
+        // formData.append('time', CTime);
+        // $.ajax({
+        //     url:"<?php echo env('APP_URL') ?>/admin/upload",
+        //     type:"post",
+        //     async: false,
+        //     data: formData,
+        //     contentType: false,
+        //     processData: false,
+        //     success: function(data) {
+        //         if (data !== '') {
+        //             content = "<img src='"+ data +"' alt=" + FileName +">";
+        //             window.vditor.insertValue(content);
+        //         }
+        //     },
+        //     error:function(data) {
+        //         alert("上传失败")
+        //     }
+        // });
         // let content = this.vditor.getValue();
         // content = "<img src='/storage/"+ CTime +".png'>";
         // this.vditor.insertValue(content);

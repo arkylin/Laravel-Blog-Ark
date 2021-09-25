@@ -5,11 +5,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>@yield('title', GetConfig('SiteName') . ' | ' . GetConfig('SiteDesc'))</title>
         <!-- 引入js、css -->
+        <!-- VUE -->
+        <script src="{{ env('ASSETS_URL') }}/static/Vue/vue.runtime.global.prod.js"></script>
+        <!-- Bootstrap -->
+        <link href="{{ env('ASSETS_URL') }}/static/Bootstrap/bootstrap.min.css" rel="stylesheet">
+        <script src="{{ env('ASSETS_URL') }}/static/Bootstrap/bootstrap.bundle.min.js"></script>
+        <!-- jQuery -->
+        <script src="{{ env('ASSETS_URL') }}/static/jQuery/jquery.min.js"></script>
+        <!-- LazyLoad -->
+        <script src="{{ env('ASSETS_URL') }}/static/Lazyload/vanilla-lazyload.min.js"></script>
+        <!-- FontAwesome -->
+        <!-- <link href="{{ env('ASSETS_URL') }}/static/FontAwesome/css/all.min.css" rel="stylesheet"> -->
+        <!-- <script src="{{ env('ASSETS_URL') }}/static/FontAwesome/js/all.min.js"></script> -->
+        <!-- 自定义 -->
+        <link rel="stylesheet" href="{{ url('static/css/main.css') }}">
+        <!-- MIX -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        <!-- <link rel="stylesheet" href="<?php echo env('ASSETS_URL') ?>/css/app.css"> -->
-        <script src="{{ mix('js/app.js') }}"></script>
-        <!-- <script src="<?php echo env('ASSETS_URL') ?>/js/app.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.4.0/dist/lazyload.min.js"></script>
+        <!-- <script src="mix('js/app.js')"></script> -->
+        <!-- 完成引入 -->
         <meta name="description" content="{{ GetConfig('SiteDesc') }}">
         <meta name="keywords" content="{{ GetConfig('SiteKeywords') }}"}
         <!-- CSRF -->
@@ -34,11 +47,11 @@
             @include('shared._messages')
             </div>
         @yield('content')
-        </div>
         <!-- @yield('post_vditor', "") -->
         @yield('footer', "")
         <!-- 页脚扩展 -->
         @includeIf('layouts._footer')
+    </div>
         </br>
     </body>
 </html>

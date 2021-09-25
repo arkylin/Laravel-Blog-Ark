@@ -10,6 +10,15 @@
 @section('content')
 <article>
 <h2><?php echo $post['title']; ?></h2>
+<div id="topdesc">
+<ul>
+    <li><i class="fas fa-edit"></i>{{ $post['created'] }}</li>
+    <li><i class="fas fa-history"></i>{{ $post['modified'] }}</li>
+    <li><i class="fas fa-eye"></i>{{ $post['views'] }}</li>
+    <li><i class="fas fa-thumbs-up"></i>{{ $post['likes'] }}</li>
+</ul>
+</div>
+<hr/>
 <div id="preview"><?php echo GetSummary($post['content']); ?></div>
 </article>
 @stop

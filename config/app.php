@@ -177,6 +177,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         // 腾讯云COS
         Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class,
+        // 阿里云OOS
+        Jacobcyl\AliOSS\AliOssServiceProvider::class,
 
     ],
 
