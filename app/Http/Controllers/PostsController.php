@@ -26,9 +26,9 @@ class PostsController extends Controller
                 return redirect() -> route('home');
             }
         } elseif ($way == "post_api") {
-            $post = Post::where('id', $post)->get();
-            $PostMetaData = GetPostMetaData($post[0]);
-            Post::where('id', $post)->update(['views' => (int)$post['views'] + 1]);
+            $post = Post::where('id', $post)->get()->toArray()[0];
+            $PostMetaData = GetPostMetaData($post);
+            Post::where('id', $post['id'])->update(['views' => (int)$post['views'] + 1]);
             if (count($post) != 0) {
                 if ($PostMetaData != "") {
                     return view('posts.showapi', ['post' => $PostMetaData]);

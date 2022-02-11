@@ -22,6 +22,8 @@ Route::get('/{type}.html', 'PostsController@list')->name('posts.list');
 // Route::get('/{type}/page/{page}.html', 'PostsController@list')->name('posts.list');
 
 Route::get('/sitemap.xml', 'HomeController@sitemap')->name('sitemap');
+Route::get('/urls.txt', 'HomeController@urls')->name('urls');
+
 
 Route::get('/admin', 'AdminController@admin')->name('admin_home');
 Route::get('/admin/config', 'AdminController@config')->name('admin_config');

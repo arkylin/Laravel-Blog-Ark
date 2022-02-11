@@ -13,7 +13,7 @@ echo '<form method="POST">';
 foreach ($config as $conf) {
     echo '<div class="form-floating">';
     echo '<input type="text" class="form-control" id="' . $conf['name'] . '" name="' . $conf['name'] . '" value="' . $conf['value'] . '">';
-    echo '<label for="' . $conf['name'] . '">' . $conf['name'] . '</label>';
+    echo '<label for="' . $conf['name'] . '">' . $conf['hname'] . '</label>';
     echo '</div>';
     echo '</br>';
 }

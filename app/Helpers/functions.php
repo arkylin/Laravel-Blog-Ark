@@ -36,22 +36,6 @@ function GetPostMetaData($post) {
 }
 // 获取分页链接
 function GetPageLink($page, $type) {
-    // if ($type == 'admin') {
-    //     if ($page == 1) {
-    //         $page_link = env('APP_URL') . '/' . $type . '/edit';
-    //     }
-    //     $page_link = env('APP_URL') . '/' . $type . '/edit?page=' . $page;
-    // } elseif ($type == 'search') {
-    //     if ($page == 1) {
-    //         $page_link = url() -> current();;
-    //     }
-    //     $page_link = env('APP_URL') . '/' . $type . '/' . env('FENYEMULU') . '/' . $page . '.html';
-    // } else {
-        // if ($page == 1) {
-        //     $page_link = env('APP_URL') . '/' . $type . '.html';
-        // }
-        // $page_link = env('APP_URL') . '/' . $type . '/' . env('FENYEMULU') . '/' . $page . '.html';
-    // }
     if ($type == 'search') {
         $page_link = preg_replace('~\&page=.*[0-9]~','',url()->full());
         if ($page != 1) {
@@ -68,7 +52,7 @@ function GetPageLink($page, $type) {
 }
 // 获取文章页链接
 function GetPostLink($slug) {
-    return env('APP_URL') . '/posts/' . $slug . '.html';
+    return GetConfig('SiteURL') . '/posts/' . $slug . '.html';
 }
 // 生成文章列表
 function GetPostsLists($posts, $page, $type) {
@@ -177,7 +161,7 @@ function GeneratePostCard($post) {
     $out .= '<div class="gallery">';
     $out .= '<a target="_blank" href="' . GetPostLink($post['slug']) . '">';
     if ($post_cover == '') {
-        $post_cover = env('APP_URL') . '/static/img/cross.png';
+        $post_cover = GetConfig('SiteURL') . '/static/img/cross.png';
     }
     $out .= '<img data-src="' . $post_cover . '" class="lazy mini-post-cover" alt="' . $post_title . '"' . '>';
     $out .= '<div class="desc">' . $post_title . '</div>';
@@ -196,14 +180,11 @@ function GetSummary($post_content) {
 }
 //查找文章默认封面
 function GetPostCover($post) {
-    // $reg_match = '~' . env('APP_URL') . '/static/attachments' . '.*?(jpg|png|jpeg)' . '~';
     $reg_match = '~' . 'https://' . '.*?(jpg|png|jpeg)' . '~';
     preg_match($reg_match, $post, $match);
     if (!empty($match)) {
         return $match[0];  
     } else {
-        // return env('APP_URL') . '/static/img/cross.png';
-        // return '';
         if (env('ASSETS_URL') !== '') {
             return env('ASSETS_URL') . '/img/random/bing-2020-2021-compressed/' . rand(1,268) . '.jpg';
         }
@@ -245,13 +226,24 @@ function GetSitemap() {
     $out .= '<?xml version="1.0" encoding="utf-8"?>';
     $out .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
     $posts_slug = App\Models\Post::select('slug')->addSelect('modified')->where('status','publish')->orderBy('created','desc')->get()->toArray();
-    $out .= Sitemap_Example(env('APP_URL'), substr($posts_slug[0]['modified'],0,10), 1);
+    $out .= Sitemap_Example(GetConfig('SiteURL'), substr($posts_slug[0]['modified'],0,10), 1);
     foreach ($posts_slug as $post_slug) {
         $out .= Sitemap_Example(GetPostLink($post_slug['slug']), substr($post_slug['modified'],0,10), 0.8);
     }
     $out .= '</urlset>';
     return $out;
 }
+
+function GetUrls() {
+    $out = '';
+    $posts_slug = App\Models\Post::select('slug')->addSelect('modified')->where('status','publish')->orderBy('created','desc')->get()->toArray();
+    $out .= GetConfig('SiteURL') . "\n";
+    foreach ($posts_slug as $post_slug) {
+        $out .= GetPostLink($post_slug['slug']). "\n";
+    }
+    return $out;
+}
+
 function GetPostsTotal($type) {
     return count(App\Models\Post::select('id')->where('type',$type)->where('status','publish')->get()->toArray());
 }
@@ -270,7 +262,7 @@ function GetHomeMiniCard($type) {
     $out .= '<div id="' . $type . '" class="home">';
     $out .= '<div class="mini-topbar">';
     $out .= '<ul><li><p>' . GetHomeMiniCardInChinese($type) . '</p></li><li>';
-    $out .= '<a href="' . env('APP_URL') . '/' . $type . '.html">';
+    $out .= '<a href="' . GetConfig('SiteURL') . '/' . $type . '.html">';
     if (GetPostsTotal($type) > env('SHOW_POSTS_NUM')) {
         $out .= '还有' . GetPostsTotal($type)-env('SHOW_POSTS_NUM') . '篇文章 ';
     }

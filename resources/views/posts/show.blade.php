@@ -10,22 +10,22 @@
 @section('content')
 <article>
 <h2><?php echo $post['title']; ?></h2>
-<!-- <div id="topdesc">
+<div id="topdesc">
 <ul>
     <li><i class="fas fa-edit"></i>{{ $post['created'] }}</li>
     <li><i class="fas fa-history"></i>{{ $post['modified'] }}</li>
-    <li><i class="fas fa-eye"></i>{{ $post['views'] }}</li>
-    <li><i class="fas fa-thumbs-up"></i>{{ $post['likes'] }}</li>
+    <li><i class="fas fa-eye"></i>{{ $post['views'] + 1 }}</li>
+    <!-- <li><i class="fas fa-thumbs-up"></i>{{ $post['likes'] }}</li> -->
 </ul>
-</div> -->
+</div>
 <hr/>
 <div id="preview"><?php echo GetSummary($post['content']); ?></div>
 </article>
 @stop
 
 @section('footer')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
-<script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js"></script>
+<link rel="stylesheet" href="{{ env('ASSETS_URL') }}/static/Vditor/dist/index.css" />
+<script src="{{ env('ASSETS_URL') }}/static/Vditor/dist/index.min.js"></script>
 <script>
     //Vditor
     const initOutline = () => {

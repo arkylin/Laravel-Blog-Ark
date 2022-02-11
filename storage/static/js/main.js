@@ -1,5 +1,5 @@
 function GetRoll () {
-    if (document.documentElement.scrollTop >= 500) {
+    if (document.documentElement.scrollTop >= 50) {
         document.getElementById("topbar").style.position="fixed";
         document.getElementById("topbar").style.zIndex="9999";
     } else {

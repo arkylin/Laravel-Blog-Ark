@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
-<script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js"></script>
+<link rel="stylesheet" href="{{ env('ASSETS_URL') }}/static/Vditor/dist/index.css" />
+<script src="{{ env('ASSETS_URL') }}/static/Vditor/dist/index.min.js"></script>
 <div id="vditor" name="description" ></div>
 <script>
     let toolbar
