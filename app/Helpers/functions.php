@@ -15,6 +15,31 @@ function GetConfig($name) {
         return '';
     }
 }
+function GetPageDescri($content) {
+    $content = str_replace("\n","",$content);
+    return $content;
+}
+function GetOTPToken() {
+    $otp = OTPHP\TOTP::create();
+    return $otp->getSecret();
+}
+function GetOTPass($user) {
+    $secret = "000000";
+    $token = App\Models\User::where('id', 1)->select("otp_token")->get();
+    if (!empty($token)){
+        $otp = OTPHP\TOTP::create($token[0]["otp_token"]);
+        return $otp->now();
+    } else {
+        return $secret;
+    }
+}
+function CheckOTPass($user,$pass) {
+    if ($pass == GetOTPass($user)) {
+        return True;
+    } else {
+        return False;
+    }
+}
 //获取文章元信息
 function GetPostMetaData($post) {
     $output = "";

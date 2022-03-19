@@ -24,7 +24,8 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <!-- <script src="mix('js/app.js')"></script> -->
         <!-- 完成引入 -->
-        <meta name="description" content="{{ GetConfig('SiteDesc') }}">
+        <!-- <meta name="description" content="{{ GetConfig('SiteDesc') }}"> -->
+        @yield('descri', '')
         <meta name="keywords" content="{{ GetConfig('SiteKeywords') }}"}
         <!-- CSRF -->
         <meta name="csrf-token" content="{{ csrf_token() }}">

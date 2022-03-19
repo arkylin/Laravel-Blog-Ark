@@ -4,6 +4,12 @@
 <input type="text" id="post_slug" v-model="post_slug" :style="{width:get_width(post_slug)}"><br />
 <input type="text" id="post_created" v-model="post_created" :style="{width:get_width(post_slug)}">
 </div>
+<select class="form-select" id="post_stat" aria-label="Default select example">
+  <option selected>点击我选择</option>
+  <option value="publish">公开</option>
+  <option value="secret">私密</option>
+  <option value="unpublish">草稿</option>
+</select>
 <script>
     var NowTime = '<?php $NowTime = date('Y-m-d H:i:s', time()); echo $NowTime ?>';
     Vue.createApp({
@@ -293,6 +299,7 @@
 function myFunction() {
     let PostValue = this.vditor.getValue();
     let CreatedTime = NowTime;
+    let post_stat = document.getElementById("post_stat").value
     if ($("#post_created").val() != ""){
         CreatedTime = $("#post_created").val();
     }
@@ -301,7 +308,8 @@ function myFunction() {
             slug: $("#post_slug").val(),
             created: CreatedTime,
             modified: NowTime,
-            content: PostValue
+            content: PostValue,
+            status: post_stat
         };
     console.log(PostData);
     $.ajaxSetup({

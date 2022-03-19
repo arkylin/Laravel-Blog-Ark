@@ -1,5 +1,9 @@
 @extends('layouts.default')
 
+@section("descri")
+<meta name="description" content="{{ GetConfig('SiteDesc') }}">
+@stop
+
 @section('content')
 
 <div class="flash-message">

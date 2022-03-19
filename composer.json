@@ -10,7 +10,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "jacobcyl/ali-oss-storage": "^2.1",
         "laravel/framework": "^8.54",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "spomky-labs/otphp": "^10.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

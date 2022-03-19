@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class SessionsController extends Controller
 {
@@ -21,6 +22,10 @@ class SessionsController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
+            if (!CheckOTPass(1,$request->otpass)) {
+                Auth::logout();
+                return redirect('login');
+            } else {
             session()->flash('success', '欢迎回来！');
             // return redirect()->route('users.show', [Auth::user()]);
             // return redirect()->route('管理后台');
@@ -32,6 +37,7 @@ class SessionsController extends Controller
                 $fallback = route('users.show', Auth::user());
                 return redirect()->intended($fallback);
             }
+        }
         } else {
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back()->withInput();

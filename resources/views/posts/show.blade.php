@@ -1,5 +1,9 @@
 @extends('layouts.default')
 
+@section("descri")
+<meta name="description" content="{{  GetPageDescri(GetSummary($post['content'])) }}">
+@stop
+
 @section('title')
 <?php
     $post_title = EchoTitle($post['title']);
@@ -61,6 +65,7 @@
     })
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/nord.min.css">
-<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"></script>
+<!-- <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"></script> -->
+<script src="{{ env('ASSETS_URL') }}/static/HighLight/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
 @stop

@@ -24,6 +24,11 @@
           </div>
 
           <div class="form-group">
+            <label for="otpass">OTP验证码</label>
+            <input type="text" name="otpass" class="form-control" value="{{ old('otpass') }}">
+          </div>
+
+          <div class="form-group">
             <div class="form-check">
               <input type="checkbox" class="form-check-input" name="remember" id="exampleCheck1">
               <label class="form-check-label" for="exampleCheck1">记住我</label>
